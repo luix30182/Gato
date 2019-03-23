@@ -22,27 +22,33 @@ function onCanvasClick(e){
     const coord = getMouseLocation(e);
     const cell = getCellFromLocation(coord);
     console.log(coord,cell)
-    processCellClick(cell);
+    // processCellClick(cell);
+    drawCoss(coord.x,coord.y)
 }
 function getMouseLocation(e){
     const cx = e.pageX - canvas.offsetLeft;
     const cy = e.pageY - canvas.offsetTop;
-
     return {x: cx, y:cy};
 }
 function getCellFromLocation(coord){
     const cCoord = {x:0, y:0};
-    if(coord.x > cellWidth*2) cCoord.x = 2;
-    else if(cCoord.x > cellWidth) cCoord.x = 1
+    if(coord.x>400){
+       cCoord.x = 2;
+    }else if(coord.x>200){
+       cCoord.x = 1;
+    }
 
-    if(coord.y > cellHeight*2) cCoord.y = 2;
-    else if(coord.y > cellHeight) cCoord.y = 1;
-
+    if(coord.y>400){
+        cCoord.y = 2
+    }else if(coord.y > 200){
+        cCoord.y = 1;
+    }
     return cCoord;
 }
 function clearGame(){
     ctx.clearRect(0,0,boardWidth,boartheight);
     drawGameBoard();
+    drawMoves();
 }
 //Esta funcion dibuja las lineas del tablero de juego 
 function drawGameBoard() {
@@ -68,14 +74,19 @@ function drawGameBoard() {
 }
 
 function drawCoss(x,y){
+
+    const boardIntersect = [
+        {x1:0,y1:0,x2:0,y2:0},
+    ];
+
     ctx.beginPath();
-    ctx.moveTo(x,cellWidth,y*cellHeight);
-    ctx.lineTo(x*cellWidth+cellWidth,y*cellHeight+cellHeight)
+    ctx.moveTo(x - boardWidth, y - boartheight);
+    ctx.lineTo(x + boardWidth, y + boartheight);
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.moveTo(x,cellWidth+cellWidth,y*cellHeight);
-    ctx.lineTo(x*cellWidth,y*cellHeight+cellHeight);
+    ctx.moveTo(x + boardWidth, y - boartheight);
+    ctx.lineTo(x - boardWidth, y + boartheight);
     ctx.stroke();
 }
 
@@ -148,9 +159,7 @@ function endGame(message){
 function processCellClick(cell) {
     if (game[cell.x][cell.y] != 0) return;
     game[cell.x][cell.y] = currentPlayer;
- 
-    clearGame();
- 
+
     if (currentPlayer == 1) currentPlayer = 2;
     else currentPlayer = 1;
  
