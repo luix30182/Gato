@@ -5,6 +5,7 @@ const boartheight = 600;
 const cellHeight = boartheight/3;
 const cellWidth = boardWidth/3;
 let turn = 1;
+let = gameover = false;
 // 0 = celda vacia
 let game = [[0,0,0],[0,0,0],[0,0,0]];
 let currentPlayer = null;
@@ -21,7 +22,17 @@ window.onload = function(){
 function onCanvasClick(e){
     const coord = getMouseLocation(e);
     const cell = getCellFromLocation(coord);
-    processCellClick(cell);
+    if(turn < 10){
+        if(!gameover){
+            processCellClick(cell);
+        }else{
+            endGame()
+            clearGame();
+        }
+    }else{
+        endGame()
+        clearGame();
+    }
 }
 function getMouseLocation(e){
     const cx = e.pageX - canvas.offsetLeft;
@@ -313,19 +324,33 @@ function checkWin(){
     
     if(r1==3|r2==3|r3==3|c1==3|c2==3|c3==3|d1==3|d2==3){
         console.log('Gana el jugador')
-        endGame()
+        const m = document.querySelector('.player');
+        m.style.display = 'block';
+        gameover = true;
     }else if(r1==15|r2==15|r3==15|c1==15|c2==15|c3==15|d1==15|d2==15){
         console.log('Gana la maquina')
-        endGame()
+        const m = document.querySelector('.machine');
+        m.style.display = 'block';
+        gameover = true;
     }else if(turn > 9){
         console.log('Es un empate')
-        
+        const m = document.querySelector('.draw');
+        m.style.display = 'block';
+        console.log(turn)
+        gameover = true;
     }
 
 }
 function endGame(){
+    const m = document.querySelector('.player');
+    const m1 = document.querySelector('.machine');
+    const m2 = document.querySelector('.draw');
+    m.style.display = 'none';
+    m1.style.display = 'none';
+    m2.style.display = 'none';
     currentPlayer = 1;
     turn = 1;
+    gameover = false;
     game = [[0,0,0],[0,0,0],[0,0,0]]
     clearGame();
 }
